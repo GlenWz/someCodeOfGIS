@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flyTo和setViewt</title>
+    <script src="../Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="../Cesium/Widgets/widgets.css">
+</head>
+<style>
+    *{
+        padding: 0px;
+        margin: 0px;
+    }
+    .cesium-widget-credits{
+        display: none !important;
+    }
+</style>
+<body>
+    <div id="cesiumcontainer">
+        <button onclick="flyToBJ" id="ftbtn">FlyToFreeDom</button>
+    </div>
+    
+</body>
+<script>
+    /*
+    //高德遥感影像
+    http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}
+    //矢量切片
+    http://webrd01.is.autonavi.com/appmaptile?scale=1&lang=zh_cn&style=8&x={x}&y={y}&z={z}
+    //路网
+    http://webrd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=4
+    //地名
+    http://webrd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=11
+    //路网+地名
+    http://webst01.is.autonavi.com/appmaptile?&style=8&x={x}&y={y}&z={z}
+    //enheng
+    http://webst01.is.autonavi.com/appmaptile?&lang=zh_cn&style=8&x={x}&y={y}&z={z}
+    */
+    Cesium.Ion.defaultAccessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1ZjE0MTBlNy1kM2ZkLTRlZjgtODgwNS03NjgyNjlhODliZGMiLCJpZCI6MTEyOTI0LCJpYXQiOjE2NjcxMzgwMTR9.SrRNsUeTqkcTXvePGq0PZj6ipvTnO5ha-SUqDBnTlLg"	
+    let viewer=new Cesium.Viewer('cesiumcontainer',{
+        geocoder:false,
+        //home健
+        homeButton:false,
+        //动画控件
+        animation:false,
+        //全屏按钮
+        fullscreenButton:false,
+        //场景模式选择器
+        sceneModePicker:false,
+        //图层控制器
+        baseLayerPicker:false,
+        //时间轴
+        timeline:false,
+        //导航帮助按钮
+        navigationHelpButton:false,
+        //底图服务
+        imageryProvider:new Cesium.UrlTemplateImageryProvider( {
+            url:"http://webrd01.is.autonavi.com/appmaptile?scale=1&lang=zh_cn&style=8&x={x}&y={y}&z={z}",
+            //url:" http://webrd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=4",
+            maximumLevel:18,
+            minimumLevel:1
+        }),
+
+    })
+
+    let imageLayer=new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
+        //url:"http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+        url:"http://webst01.is.autonavi.com/appmaptile?&style=8&x={x}&y={y}&z={z}",
+        minimumLevel:1,
+        maximumLevel:18
+    }));
+
+    viewer.imageryLayers.add(imageLayer)
+    // 投影方式 webUTM webmercator,投影出来是一个矩形
+    viewer.camera.setView({
+        destination:Cesium.Cartesian3.fromDegrees(118,38,1000000),//相机（眼睛）位置，经度，纬度和高度
+        orientation:{
+            heading:Cesium.Math.toRadians(0),    //朝向 0.0 朝北、90 朝东、180 朝南
+            pitch:Cesium.Math.toRadians(-90),       //俯仰
+            roll:0.0                                //滚转
+        }
+    })
+    function flyToBJ(){
+        viewer.camera.flyTo({
+        destination:Cesium.Cartesian3.fromDegrees(110,38,100000),//相机（眼睛）位置，经度，纬度和高度
+        orientation:{
+            heading:Cesium.Math.toRadians(0),    //朝向 0.0 朝北、90 朝东、180 朝南
+            pitch:Cesium.Math.toRadians(-90),       //俯仰
+            roll:0.0                                //滚转
+        },
+        duration:10      //飞过来的时间距离
+    })}
+    let ftbtn= document.getElementById('ftbtn')
+    ftbtn.addEventListener('click',flyToBJ)
+</script>
+</html>
