@@ -11,7 +11,9 @@ MNDWI (Modified Normalized Difference Water Index) calculation by Gdal
 ### vueLeafletDemoCode
 Leaflet
 
-<img src="./vueLeafletDemoCode/pic/windy.png" alt="原始影像_orginal_data">
+<img src="./vueLeafletDemoCode/pic/windy.png" alt="windy"/>
+
+
 
 <video contols width="850" muted autoplay="autoplay" loop="loop">
 	<source src="./vueLeafletDemoCode/pic/windy.mp4" / type="video/mp4">
