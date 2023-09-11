@@ -71,6 +71,15 @@
 
     viewer.imageryLayers.add(imageLayer)
 
+    viewer.terrainProvider=new Cesium.CesiumTerrainProvider({
+        url:"./cesiumData/terrain"
+
+    });
+
+    //通过经纬度如何获取高程数据
+
+
+
     // 投影方式 webUTM webmercator,投影出来是一个矩形
     viewer.camera.setView({
         destination:Cesium.Cartesian3.fromDegrees(109,34,1000000),  //相机位置

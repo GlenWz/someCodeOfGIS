@@ -72,6 +72,29 @@
     viewer.imageryLayers.add(imageLayer)
 
     // 投影方式 webUTM webmercator,投影出来是一个矩形
+
+    //创建dataSource
+    let dataSource=new Cesium.CustomDataSource("cesiumEntity");
+    viewer.dataSources.add(dataSource);
+    let ele=dataSource.entities.add({
+        position:Cesium.Cartesian3.fromDegrees(108,34,10),
+        billboard:{
+            image:"./pic/pic1.jpg",
+            scale:0.5,
+            width:4000,
+            height:3000,
+            sizeInMeters:true
+        },
+        label:{
+            text:"label1",
+        },
+        point:{
+            pixelSize:10,
+            color:Cesium.Color.RED
+        }
+    });
+
+
     viewer.camera.setView({
         destination:Cesium.Cartesian3.fromDegrees(109,34,1000000),  //相机位置
         //相机的姿态
