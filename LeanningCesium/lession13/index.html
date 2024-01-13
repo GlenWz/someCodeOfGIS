@@ -20,7 +20,8 @@
 <body>
     <div id="cesiumcontainer"></div>
 </body>
-<script>
+<script type="module">
+    
     /*
     //高德遥感影像
     http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}
@@ -71,23 +72,23 @@
 
     viewer.imageryLayers.add(imageLayer)
 
-    viewer.terrainProvider=new Cesium.CesiumTerrainProvider({
-        //url:"./cesiumData/terrain"
-        url:"./c3d"
-    });
-
-    //通过经纬度如何获取高程数据
-    // 投影方式 webUTM webmercator,投影出来是一个矩形
-    viewer.camera.setView({
-        destination:Cesium.Cartesian3.fromDegrees(109,34,1000000),  //相机位置
-        //相机的姿态
-        orientation:{
-            heading:Cesium.Math.toRadians(0.0), //朝向
-            pitch:Cesium.Math.toRadians(-90),
-            roil:0.0
-        },
-        duration:5
-    });
+    // // 投影方式 webUTM webmercator,投影出来是一个矩形
+    // viewer.camera.setView({
+    //     destination:Cesium.Cartesian3.fromDegrees(109,34,1000000),  //相机位置
+    //     //相机的姿态
+    //     orientation:{
+    //         heading:Cesium.Math.toRadians(0.0), //朝向
+    //         pitch:Cesium.Math.toRadians(-90),
+    //         roil:0.0
+    //     },
+    //     duration:5
+    // });
+    var promise=Cesium.GeoJsonDataSource.load('./hbeiprovince.json');
+    promise.then(datasource=>{
+        console.log("hello?");
+        viewer.dataSources.add(datasource);
+        viewer.zoomTo(datasource);
+    })
 
 </script>
 </html>

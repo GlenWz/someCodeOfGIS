@@ -20,7 +20,8 @@
 <body>
     <div id="cesiumcontainer"></div>
 </body>
-<script>
+<script type="module">
+    
     /*
     //高德遥感影像
     http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}
@@ -71,12 +72,6 @@
 
     viewer.imageryLayers.add(imageLayer)
 
-    viewer.terrainProvider=new Cesium.CesiumTerrainProvider({
-        //url:"./cesiumData/terrain"
-        url:"./c3d"
-    });
-
-    //通过经纬度如何获取高程数据
     // 投影方式 webUTM webmercator,投影出来是一个矩形
     viewer.camera.setView({
         destination:Cesium.Cartesian3.fromDegrees(109,34,1000000),  //相机位置
@@ -88,6 +83,26 @@
         },
         duration:5
     });
+
+    //添加kml数据
+    let promiseData= viewer.dataSources.add(Cesium.KmlDataSource.load('./test.kml',
+     {
+          camera: viewer.scene.camera,
+          canvas: viewer.scene.canvas
+     })
+    );
+    promiseData.then(data=>{
+        viewer.dataSources.add(data);
+        data.entities.values.forEach((entity=>{
+            console.log(entity);
+            entity.polygon.outlineColor=Cesium.Color.RED; //边框红色
+            entity.polygon.material=Cesium.Color.BLUE;  //填充蓝色
+            entity.polygon.height=100;  //悬空高度100
+            entity.polygon.extrudedHeight=2000; //高度2000
+        }))
+        viewer.zoomTo(data);
+    })
+    //viewer.zoomTo(dataKml);
 
 </script>
 </html>

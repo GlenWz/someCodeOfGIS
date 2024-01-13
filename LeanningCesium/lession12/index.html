@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="../Cesium/Widgets/widgets.css">
+</head>
+<style>
+    *{
+        padding: 0px;
+        margin: 0px;
+    }
+    .cesium-widget-credits{
+        display: none !important;
+    }
+</style>
+<body>
+    <div id="cesiumcontainer"></div>
+</body>
+<script type="module">""
+    import {BaiduImageryProvider} from "./BaiduImageryProvider.js"
+
+    Cesium.Ion.defaultAccessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1ZjE0MTBlNy1kM2ZkLTRlZjgtODgwNS03NjgyNjlhODliZGMiLCJpZCI6MTEyOTI0LCJpYXQiOjE2NjcxMzgwMTR9.SrRNsUeTqkcTXvePGq0PZj6ipvTnO5ha-SUqDBnTlLg"	
+    let viewer=new Cesium.Viewer('cesiumcontainer',{
+        geocoder:false,
+        //home健
+        homeButton:false,
+        //动画控件
+        animation:false,
+        //全屏按钮
+        fullscreenButton:false,
+        //场景模式选择器
+        sceneModePicker:false,
+        //图层控制器
+        baseLayerPicker:false,
+        //时间轴
+        timeline:false,
+        //导航帮助按钮
+        navigationHelpButton:false,
+        //底图服务
+        imageryProvider:new BaiduImageryProvider({
+            //百度地图遥感
+            //url:"http://shangetu{s}.map.bdimg.com/it/u=x{x};y={y};z={z};v=009;type=sate&fm=46"
+            //百度地图矢量
+            //url:"http://online{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1"
+            //黑色风格
+            url: "http://api0.map.bdimg.com/customimage/tile?&x={x}&y={y}&z={z}&scale=1&customid=darkgreen"
+        })
+
+    })
+
+</script>
+</html>
