@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绘制实体</title>
+    <script src="../Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="../Cesium/Widgets/widgets.css">
+</head>
+<style>
+    *{
+        padding: 0px;
+        margin: 0px;
+    }
+    .cesium-widget-credits{
+        display: none !important;
+    }
+    #btn{
+        position: absolute;
+        width: 80px;
+        height: 40px;
+        z-index: 999;
+    }
+</style>
+<body>
+    <div id="cesiumcontainer" >
+        
+    </div>
+    
+</body>
+<script>
+    /*
+    //高德遥感影像
+    http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}
+    //矢量切片
+    http://webrd01.is.autonavi.com/appmaptile?scale=1&lang=zh_cn&style=8&x={x}&y={y}&z={z}
+    //路网
+    http://webrd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=4
+    //地名
+    http://webrd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=11
+    //路网+地名
+    http://webst01.is.autonavi.com/appmaptile?&style=8&x={x}&y={y}&z={z}
+    //enheng
+    http://webst01.is.autonavi.com/appmaptile?&lang=zh_cn&style=8&x={x}&y={y}&z={z}
+    */
+    Cesium.Ion.defaultAccessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1ZjE0MTBlNy1kM2ZkLTRlZjgtODgwNS03NjgyNjlhODliZGMiLCJpZCI6MTEyOTI0LCJpYXQiOjE2NjcxMzgwMTR9.SrRNsUeTqkcTXvePGq0PZj6ipvTnO5ha-SUqDBnTlLg"	
+    let viewer=new Cesium.Viewer('cesiumcontainer',{
+        geocoder:false,
+        //home健
+        homeButton:false,
+        //动画控件
+        animation:false,
+        //全屏按钮
+        fullscreenButton:false,
+        //场景模式选择器
+        sceneModePicker:false,
+        //图层控制器
+        baseLayerPicker:false,
+        //是否显示模型的动态效果
+        shouldAnimate:true,     
+        //时间轴
+        timeline:false,
+        //导航帮助按钮
+        navigationHelpButton:false,
+        
+        //底图服务
+        imageryProvider:new Cesium.UrlTemplateImageryProvider( {
+            url:"http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+            //url:" http://webrd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=4",
+            maximumLevel:18,
+            minimumLevel:1
+        }),
+
+    })
+
+    let imageLayer=new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
+        //url:"http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+        url:"http://webst01.is.autonavi.com/appmaptile?&style=8&x={x}&y={y}&z={z}",
+        minimumLevel:1,
+        maximumLevel:18
+    }));
+
+
+    //开启阴影
+    viewer.shadows=true;
+    viewer.scene.globe.enableLighting=true;
+    //显示帧率
+    viewer.scene.debugShowFramesPerSecond=true;
+    
+
+    viewer.imageryLayers.add(imageLayer)
+    //加载gltf
+    let position=Cesium.Cartesian3.fromDegrees(109,34,250);
+    //设置模型方向
+    let hpRoll=new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(-90),Cesium.Math.toRadians(30),0);  //弧度 90度，朝南
+    let orientation=Cesium.Transforms.headingPitchRollQuaternion(position,hpRoll);  //转换四项数
+    //添加模型
+    //添加模型
+    let model=viewer.entities.add({
+        //模型id
+        id:'model',
+        //模型位置
+        position:position,
+        //模型方向
+        orientation:orientation,
+        //模型资源
+        model:{
+            //模型路径
+            uri:'./data/Cesium_Air.glb',
+            //最小刻度
+            minimumPixelSize:120,
+            //模型最大刻度
+            //color:Cesium.Color.RED,
+            //模型最大刻度
+            maximumScale:0.5,
+            shadows:Cesium.ShadowMode.ENABLED,  //DISABLE,CAST_ONLY
+            //模型是否可见
+            colorBlendMode:Cesium.ColorBlendMode.HIGHLIGHT,   //三个属性HIGHLIGHT高亮MIX以及REPLACE
+            show:true,
+            silhouetteColor:Cesium.Color.BLUE,    //选中模型突出轮廓廓线
+            silhouetteSize:2,
+            //distanceDisplayCondition:new Cesium.DistanceDisplayCondition(1,2000000),
+        },
+        description:"飞机模型"
+    })
+    viewer.zoomTo(model);
+
+
+    </script>
+</html>

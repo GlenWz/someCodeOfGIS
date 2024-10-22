@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModelMetadata version="1">
+	<!--空间参考信息-->
+	<SRS>EPSG:4548<SRS>
+	<SRSOrigin>438505,4313235,0</SRSOrigin>	
+	<Texture>
+		<ColorSource>Visible</ColorSource>
+	</Texture>
+</ModelMetadata>

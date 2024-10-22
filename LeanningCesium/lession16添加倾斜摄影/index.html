@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="../Cesium/Widgets/widgets.css">
+</head>
+<style>
+    *{
+        padding: 0px;
+        margin: 0px;
+    }
+    .cesium-widget-credits{
+        display: none !important;
+    }
+</style>
+<body>
+    <div id="cesiumcontainer"></div>
+</body>
+<script>
+    Cesium.Ion.defaultAccessToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1ZjE0MTBlNy1kM2ZkLTRlZjgtODgwNS03NjgyNjlhODliZGMiLCJpZCI6MTEyOTI0LCJpYXQiOjE2NjcxMzgwMTR9.SrRNsUeTqkcTXvePGq0PZj6ipvTnO5ha-SUqDBnTlLg"	
+    
+    //const tianSatellite = "http://fxpc.mem.gov.cn/data_preparation/a12eadf6-1a57-43fe-9054-2e22277bd553/4eb4b664-5633-4ab3-b0fd-345829dd3a87/wmts?geokey=2CA54B6D242305ABF3822EC38D121CD9"; // 天地图影像地图地址
+    //const tianAnnotation= "http://fxpc.mem.gov.cn/data_preparation/a12eadf6-1a57-43fe-9054-2e22277bd553/4eb4b664-5633-4ab3-b0fd-345829dd3a87/wmts?geokey=2CA54B6D242305ABF3822EC38D121CD9"; // 天地图影像地图注记地址
+    const keyT="70a8f28b2a69c4e4d95660299fa47a21";      //key天地图
+    //这个是遥感影像
+    const tianSatellite="http://t{s}.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk="+keyT;
+    //这个是注记
+    const tianAnnotation="http://t{s}.tianditu.com/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default.jpg&tk="+keyT;
+    //矢量瓦片
+    //const tianShpLayer="http://t{s}.tianditu.gov.cn/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=vec&tileMatrixSet=c&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk="+keyT;
+     
+    
+    const shpLayers="http://t{s}.tianditu.com/vec_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=vec&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk="+keyT;
+
+    const layersofTian="http://t{s}.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk="+keyT;
+
+    const subdomainLevel=["0","1","2","3","4","5","6","7","8","9"];
+    let viewer=new Cesium.Viewer('cesiumcontainer',{
+        geocoder:false,
+        //home健
+        homeButton:false,
+        //动画控件
+        animation:false,
+        //全屏按钮
+        fullscreenButton:false,
+        //场景模式选择器
+        sceneModePicker:false,
+        //图层控制器
+        baseLayerPicker:false,
+        //时间轴
+        timeline:false,
+        //导航帮助按钮
+        navigationHelpButton:false,
+        imagerProvider:new Cesium.WebMapTileServiceImageryProvider({
+            //url:tianSatellite,
+            //url:tianShpLayer,
+            url:layersofTian,
+            //url:"shpLayers",
+            subdomains:subdomainLevel,
+            layer : 'tiandituLayer',
+            style : 'default',
+            format : 'image/jpeg',
+            //tileMatrixSetID : 'default028mm',
+            tileMatrixSetID :"GoogleMapCompatilbe",//谷歌切片方式
+            maximumLevel: 19,
+            
+        })
+    })
+
+    viewer.camera.setView({
+        destination:Cesium.Cartesian3.fromDegrees(109,34,1000000),  //相机位置
+        //相机的姿态
+        orientation:{
+            heading:Cesium.Math.toRadians(0.0), //朝向
+            pitch:Cesium.Math.toRadians(-90),
+            roil:0.0
+        },
+        duration:5
+    });
+    
+    //栅格注记
+    viewer.imageryLayers.addImageryProvider(new Cesium.WebMapTileServiceImageryProvider({
+            url:tianAnnotation,
+            subdomains:subdomainLevel,
+            layer : 'tiandituLayer',
+            style : 'default',
+            format : 'image/jpeg',
+            tileMatrixSetID :"GoogleMapCompatilbe",//谷歌切片方式
+            maximumLevel: 19,
+    }))
+    
+    //矢量注记
+    viewer.imageryLayers.addImageryProvider(new Cesium.WebMapTileServiceImageryProvider({
+               url: "http://t0.tianditu.com/cva_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cva&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default.jpg&tk="+keyT,
+               layer: "tdtAnnoLayer",
+               style: "default",
+               format: "image/jpeg",
+               tileMatrixSetID: "GoogleMapsCompatible"
+    }));
+
+    let tileSet=new Cesium.Cesium3DTileset({
+        url:"./test3dtiles/tileset.json",
+        maximumScreenSpaceError:1,//根据项目需求数值越大越远越模糊，越清楚电脑消耗性能越大
+    });
+    viewer.scene.primitives.add(tileSet);
+    viewer.zoomTo(tileSet);
+
+    //经常使用的参数
+
+</script>
+</html>
