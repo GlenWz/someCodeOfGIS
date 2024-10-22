@@ -2,7 +2,7 @@
 ### Rs_MNDWI_Of_Python
 
 利用Gdal计算MNDWI（改进归一化水体指数）<br>
-MNDWI (Modified Normalized Difference Water Index) calculation by Gdal
+MNDWI (Modified Normalized Difference Water Index) calculate by Gdal
 <img src="./RsMNDWIOfPython/pic/orginalDataOfRS.png" alt="原始影像_orginal_data">
  
 <img src="./RsMNDWIOfPython/pic/MNDWI_data.png" alt="计算后的MNDWI_the_MNDWI_data">
